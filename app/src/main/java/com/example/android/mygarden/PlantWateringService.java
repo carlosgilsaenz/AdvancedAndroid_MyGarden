@@ -149,6 +149,7 @@ public class PlantWateringService extends IntentService {
             long createdAt = cursor.getLong(createTimeIndex);
             int plantType = cursor.getInt(plantTypeIndex);
             plantID = cursor.getLong(plantIDIndex);
+            Log.d("PlantWateringservice","Plant ID: " + plantID);
             cursor.close();
             imgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
 

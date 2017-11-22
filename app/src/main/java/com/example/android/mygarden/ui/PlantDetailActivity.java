@@ -25,6 +25,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,7 +49,8 @@ public class PlantDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_detail);
-        mPlantId = getIntent().getLongExtra(EXTRA_PLANT_ID, PlantContract.INVALID_PLANT_ID);
+        mPlantId = getIntent().getLongExtra(EXTRA_PLANT_ID,PlantContract.INVALID_PLANT_ID);
+        Log.d("PlantDetailActivity","Plant Id: " + mPlantId);
         // This activity displays single plant information that is loaded using a cursor loader
         getSupportLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
     }
@@ -81,12 +83,14 @@ public class PlantDetailActivity extends AppCompatActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), mPlantId);
+        Log.d("PlantDetailActivity","SINGLE_PLANT_URI: " + SINGLE_PLANT_URI);
         return new CursorLoader(this, SINGLE_PLANT_URI, null,
                 null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d("PlantDetailActivity","onLoadFinished cursor count: " + cursor.getCount());
         if (cursor == null || cursor.getCount() < 1) return;
         cursor.moveToFirst();
         int createTimeIndex = cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_CREATION_TIME);
