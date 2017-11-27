@@ -55,7 +55,21 @@ public class PlantWidgetProvider extends AppWidgetProvider {
     }
 
     private static RemoteViews getGardenGridRemoteView(Context context) {
-        return null;
+        RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.widget_grid_view);
+
+        //  Set the GridViewWidgetService intent to act as the adapter for the GridView
+        Intent intent = new Intent(context,GridViewWidgetService.class);
+        views.setRemoteAdapter(R.id.widget_grid_view,intent);
+
+        //  Set the PlantDetailActivity intent to launch when clicked
+        Intent detailIntent = new Intent(context,PlantDetailActivity.class);
+        PendingIntent detailPendingIntent = PendingIntent.getActivity(context,0,detailIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.layout.widget_grid_view,detailPendingIntent);
+
+        //  Handle empty garden
+        views.setEmptyView(R.id.widget_grid_view,R.id.empty_view);
+
+        return views;
     }
 
     public static RemoteViews getSinglePlantRemoteView(Context context,int imgRes, long plantId, boolean showWater){
